@@ -1,2 +1,2 @@
-# Open PE Router on Kubernetes Network by Containerlba
+# Open PE Router on Kubernetes Network by Containerlab
 
