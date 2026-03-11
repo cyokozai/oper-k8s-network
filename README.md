@@ -5,7 +5,7 @@
 Build DevContainer image:
 
 ```bash
-docker build -t openpe-router-k8s:latest .s
+kind create cluster --name c9s --config kind/kind-config.yaml
 ```
 
 ## Components
