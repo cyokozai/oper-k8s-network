@@ -1,0 +1,25 @@
+{
+  "name": "Containerlab DooD",
+  "image": "ghcr.io/srl-labs/containerlab/devcontainer-dood-slim:0.72.0",
+  "runArgs": [
+    "--network=host",
+    "--pid=host",
+    "--privileged"
+  ],
+
+  "mounts": [
+    "type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock",
+    "type=bind,source=/var/lib/docker,target=/var/lib/docker"
+  ],
+
+  "workspaceFolder": "${localWorkspaceFolder}",
+  "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind",
+  
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-azuretools.vscode-docker", "srl-labs.containerlab-utils"]
+    }
+  },
+
+  "postStartCommand": "sudo chmod 666 /var/run/docker.sock"
+}
