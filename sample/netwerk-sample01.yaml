@@ -1,0 +1,23 @@
+apiVersion: clabernetes.containerlab.dev/v1alpha1
+kind: Topology
+metadata:
+  name: openperouter-lab
+  namespace: c9s
+spec:
+  definition:
+    containerlab: |
+      name: openperouter-lab
+      topology:
+        nodes:
+          tor:
+            kind: linux
+            image: frrouting/frr:10.2.1
+          client-a:
+            kind: linux
+            image: alpine:3.19
+          client-b:
+            kind: linux
+            image: alpine:3.19
+        links:
+          - endpoints: ["tor:eth1", "client-a:eth1"]
+          - endpoints: ["tor:eth2", "client-b:eth1"]
