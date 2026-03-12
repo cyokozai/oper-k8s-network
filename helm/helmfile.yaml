@@ -1,0 +1,39 @@
+repositories:
+  - name: openperouter
+    url: https://openperouter.github.io/openperouter
+
+# kubeContext must exist in KUBECONFIG — helmfile aborts if not found.
+helmDefaults:
+  kubeContext: kind-c9s
+  wait: true
+  timeout: 300
+
+releases:
+  - name: openperouter
+    namespace: openperouter-system
+    createNamespace: true
+    chart: openperouter/openperouter
+    version: "0.0.5"
+    hooks:
+      # multus and ipamclaims have no helm charts — applied via kubectl before install
+      - events: ["presync"]
+        command: "kubectl"
+        args:
+          - "apply"
+          - "-f"
+          - "https://raw.githubusercontent.com/k8snetworkplumbingwg/ipamclaims/v0.4.0-alpha/artifacts/k8s.cni.cncf.io_ipamclaims.yaml"
+      - events: ["presync"]
+        command: "kubectl"
+        args:
+          - "apply"
+          - "-f"
+          - "https://raw.githubusercontent.com/k8snetworkplumbingwg/multus-cni/master/deployments/multus-daemonset-thick.yml"
+
+  - name: clabernetes
+    namespace: c9s
+    createNamespace: true
+    # clabernetes is distributed via OCI registry, not a traditional helm repo
+    chart: oci://ghcr.io/srl-labs/clabernetes/clabernetes
+    version: "0.4.1"
+    needs:
+      - openperouter-system/openperouter

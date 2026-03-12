@@ -2,11 +2,18 @@
 
 ## Usage
 
-Build DevContainer image:
+1. Build DevContainer image
+2. Create a Kubernetes cluster using Kind
 
-```bash
-kind create cluster --name c9s --config kind/kind-config.yaml
-```
+  ```bash
+  kind create cluster --name c9s --config kind/kind-config.yaml
+  ```
+
+3. Deploy the Open PE Router on the Kubernetes cluster with Helmfile
+
+  ```bash
+  helmfile -f helm/helmfile.yaml apply
+  ```
 
 ## Components
 
