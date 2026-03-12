@@ -14,6 +14,11 @@ releases:
     createNamespace: true
     chart: openperouter/openperouter
     version: "0.0.5"
+    values:
+      - openperouter:
+          # Tell openperouter which multus network to attach to router pods
+          multusNetworkAnnotation: openperouter
+          cri: containerd
     hooks:
       # multus and ipamclaims have no helm charts — applied via kubectl before install
       - events: ["presync"]
