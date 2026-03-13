@@ -69,7 +69,7 @@ graph TB
 ├── scripts/
 │   └── connect-tor.sh          # tor コンテナを各 kind ノードの openbr0 に接続
 └── topology/
-    └── oper-sample01.yaml      # containerlab トポロジー (tor / client-a / client-b)
+    └── openperouter-lab.yaml      # containerlab トポロジー (tor / client-a / client-b)
 ```
 
 ## 前提条件
@@ -127,7 +127,7 @@ kubectl apply -f manifests/openpe/underlay.yaml
 DevContainer を開き、以下を実行する。
 
 ```bash
-clab deploy -t topology/oper-sample01.yaml
+clab deploy -t topology/openperouter-lab.yaml
 ```
 
 ### Step 5: tor を openbr0 に接続
@@ -216,7 +216,7 @@ docker exec clab-openperouter-lab-client-a ping <Pod-IP>
 sudo ./scripts/connect-tor.sh cleanup
 
 # containerlab 停止
-clab destroy -t topology/oper-sample01.yaml
+clab destroy -t topology/openperouter-lab.yaml
 
 # kind クラスター削除
 kind delete cluster --name c9s
