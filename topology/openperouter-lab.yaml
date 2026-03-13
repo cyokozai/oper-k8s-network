@@ -6,7 +6,8 @@ topology:
       kind: linux
       image: quay.io/frrouting/frr:10.2.1
       binds:
-        # frr.conf に BGP 設定を記述し、起動時に bgpd が読み込む
+        # bgpd を有効化した daemons と BGP 設定を起動時に読み込む
+        - configs/tor/daemons:/etc/frr/daemons
         - configs/tor/frr.conf:/etc/frr/frr.conf
         - configs/tor/vtysh.conf:/etc/frr/vtysh.conf
       exec:
