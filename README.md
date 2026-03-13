@@ -4,10 +4,10 @@ kind + containerlab + openperouter を使って L3VPN / L2VNI の動作を検証
 
 ## 検証目的
 
-| # | シナリオ | 確認内容 |
-|---|---------|---------|
-| 1 | **L3VPN** | Cilium BGP CP が広報した Service IP が、openperouter 経由で Fabric (tor) の BGP テーブルに届くか |
-| 2 | **L2VNI** | Multus NIC を持つ Pod が、openperouter 経由で Fabric (tor) に L2 延伸されるか |
+| #  | シナリオ  | 確認内容                                                                              |
+|----|-----------|---------------------------------------------------------------------------------------|
+| 1  | **L3VPN** | Cilium BGP CP が広報した Service IP が openperouter 経由で Fabric (tor) に届くか      |
+| 2  | **L2VNI** | Multus NIC を持つ Pod が openperouter 経由で Fabric (tor) に L2 延伸されるか          |
 
 ## アーキテクチャ
 
@@ -50,7 +50,7 @@ graph TB
 
 ## ファイル構成
 
-```
+```text
 .
 ├── .devcontainer/
 │   └── devcontainer.json       # 開発環境 (kubectl / helm / clab 入り)
@@ -102,10 +102,10 @@ helmfile sync -f helm/helmfile.yaml
 
 インストールされるコンポーネント:
 
-| リリース名 | namespace | 役割 |
-|-----------|-----------|------|
-| cilium | kube-system | CNI + BGP Control Plane |
-| openperouter | openperouter-system | PE ルーター operator |
+| リリース名   | namespace           | 役割                    |
+|--------------|---------------------|-------------------------|
+| cilium       | kube-system         | CNI + BGP Control Plane |
+| openperouter | openperouter-system | PE ルーター operator    |
 
 > multus と ipamclaims は helm chart がないため helmfile の presync hook で `kubectl apply` する。
 
@@ -146,16 +146,16 @@ sudo ./scripts/connect-tor.sh
 
 ## 検証① L3VPN
 
-### 概要
+### L3VPN 概要
 
-```
+```text
 Cilium BGP CP --iBGP/veth--> openperouter --EVPN--> tor (FRR)
 ```
 
 Cilium BGP Control Plane が LoadBalancer Service IP を openperouter に広報し、
 tor の BGP テーブルで到達を確認する。
 
-### 手順
+### L3VPN 手順
 
 ```bash
 # L3VNI CRD を適用
@@ -169,7 +169,7 @@ docker exec clab-openperouter-lab-tor vtysh -c "show bgp summary"
 docker exec clab-openperouter-lab-tor vtysh -c "show bgp ipv4 unicast"
 ```
 
-### 期待する結果
+### L3VPN 期待する結果
 
 - tor の BGP テーブルに LoadBalancer Service IP が現れる
 - openperouter router Pod の FRR で Neighbor が Established になる
@@ -178,15 +178,15 @@ docker exec clab-openperouter-lab-tor vtysh -c "show bgp ipv4 unicast"
 
 ## 検証② L2VNI
 
-### 概要
+### L2VNI 概要
 
-```
+```text
 テスト Pod (Multus NIC) --veth--> openperouter --EVPN--> tor (FRR)
 ```
 
 Multus NIC を持つ Pod が openperouter 経由で tor と L2 疎通できることを確認する。
 
-### 手順
+### L2VNI 手順
 
 ```bash
 # L2VNI CRD を適用
@@ -202,7 +202,7 @@ docker exec clab-openperouter-lab-tor vtysh -c "show evpn mac vni all"
 docker exec clab-openperouter-lab-client-a ping <Pod-IP>
 ```
 
-### 期待する結果
+### L2VNI 期待する結果
 
 - tor で `show evpn mac vni all` に Pod の MAC が表示される
 - client-a から Pod IP への ping が通る
