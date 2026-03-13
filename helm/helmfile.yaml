@@ -1,10 +1,12 @@
 repositories:
   - name: openperouter
     url: https://openperouter.github.io/openperouter
+  - name: cilium
+    url: https://helm.cilium.io/
 
 # kubeContext must exist in KUBECONFIG — helmfile aborts if not found.
 helmDefaults:
-  kubeContext: kind-c9s
+  kubeContext: kind-k8s-oper
   wait: true
   timeout: 600
 
