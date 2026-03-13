@@ -20,14 +20,16 @@ topology:
       image: alpine:3.19
       exec:
         - "ip addr add 172.16.1.2/24 dev eth1"
-        - "ip route add default via 172.16.1.1"
+        # 相手サブネット (172.16.2.0/24) への specific route を追加
+        - "ip route add 172.16.2.0/24 via 172.16.1.1"
 
     client-b:
       kind: linux
       image: alpine:3.19
       exec:
         - "ip addr add 172.16.2.2/24 dev eth1"
-        - "ip route add default via 172.16.2.1"
+        # 相手サブネット (172.16.1.0/24) への specific route を追加
+        - "ip route add 172.16.1.0/24 via 172.16.2.1"
 
   links:
     - endpoints: ["tor:eth1", "client-a:eth1"]
