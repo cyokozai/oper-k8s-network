@@ -11,6 +11,17 @@ helmDefaults:
   timeout: 600
 
 releases:
+  - name: cilium
+    namespace: kube-system
+    chart: cilium/cilium
+    version: "1.17.2"
+    values:
+      - kubeProxyReplacement: true
+        bgpControlPlane:
+          enabled: true
+        k8sServiceHost: k8s-oper-control-plane
+        k8sServicePort: 6443
+
   - name: openperouter
     namespace: openperouter-system
     createNamespace: true
