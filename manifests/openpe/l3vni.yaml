@@ -1,0 +1,10 @@
+apiVersion: openpe.openperouter.github.io/v1alpha1
+kind: L3VNI
+metadata:
+  name: red
+  namespace: openperouter-system
+spec:
+  # VXLAN VNI for L3 VPN
+  vni: 100
+  # Linux VRF name inside the PERouter (FRR) namespace
+  vrf: red
