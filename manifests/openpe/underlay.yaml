@@ -1,0 +1,20 @@
+apiVersion: openpe.openperouter.github.io/v1alpha1
+kind: Underlay
+metadata:
+  name: underlay
+  namespace: openperouter-system
+spec:
+  # PE (openperouter) side ASN
+  asn: 64514
+  # Pool for assigning unique BGP Router IDs to each PE node
+  routeridcidr: 10.0.0.0/24
+  # NIC provided by multus (net1) is moved into the FRR namespace for BGP sessions
+  nics:
+    - net1
+  # CE (tor) BGP neighbor
+  neighbors:
+    - asn: 64512
+      address: 10.100.0.100
+  evpn:
+    # Pool for assigning unique VTEP (VXLAN tunnel endpoint) IPs to each PE node
+    vtepcidr: 10.200.0.0/24

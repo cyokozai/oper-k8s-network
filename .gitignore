@@ -66,6 +66,8 @@ tests/coverage
 
 # clab directories
 lab-examples/**/clab-*
+topology/clab-*/
+topology/*.annotations.json
 
 # ignore the following files/directories
 graph/*
