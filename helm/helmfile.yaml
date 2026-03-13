@@ -34,11 +34,3 @@ releases:
           - "-f"
           - "https://raw.githubusercontent.com/k8snetworkplumbingwg/multus-cni/master/deployments/multus-daemonset-thick.yml"
 
-  - name: clabernetes
-    namespace: c9s
-    createNamespace: true
-    # clabernetes is distributed via OCI registry, not a traditional helm repo
-    chart: oci://ghcr.io/srl-labs/clabernetes/clabernetes
-    version: "0.4.1"
-    needs:
-      - openperouter-system/openperouter
