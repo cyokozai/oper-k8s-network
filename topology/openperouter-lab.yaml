@@ -1,0 +1,44 @@
+name: openperouter-lab
+
+topology:
+  nodes:
+    tor:
+      kind: linux
+      image: quay.io/frrouting/frr:10.2.1
+      exec:
+        # net1 の IP は scripts/connect-tor.sh で付与される（起動時は net1 未存在のため）
+        - "ip addr add 172.16.1.1/24 dev eth1 || true"
+        - "ip addr add 172.16.2.1/24 dev eth2 || true"
+        - >-
+          vtysh
+          -c 'configure terminal'
+          -c 'router bgp 64512'
+          -c ' bgp router-id 10.100.0.100'
+          -c ' bgp listen range 10.100.0.0/24 peer-group OPENPEROUTER'
+          -c ' neighbor OPENPEROUTER peer-group'
+          -c ' neighbor OPENPEROUTER remote-as 64514'
+          -c ' address-family ipv4 unicast'
+          -c '  neighbor OPENPEROUTER activate'
+          -c '  network 172.16.1.0/24'
+          -c '  network 172.16.2.0/24'
+          -c ' exit-address-family'
+          -c ' end'
+          -c 'write memory'
+
+    client-a:
+      kind: linux
+      image: alpine:3.19
+      exec:
+        - "ip addr add 172.16.1.2/24 dev eth1 || true"
+        - "ip route add default via 172.16.1.1 || true"
+
+    client-b:
+      kind: linux
+      image: alpine:3.19
+      exec:
+        - "ip addr add 172.16.2.2/24 dev eth1 || true"
+        - "ip route add default via 172.16.2.1 || true"
+
+  links:
+    - endpoints: ["tor:eth1", "client-a:eth1"]
+    - endpoints: ["tor:eth2", "client-b:eth1"]
