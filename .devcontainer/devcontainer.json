@@ -9,8 +9,17 @@
 
   "mounts": [
     "type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock",
-    "type=bind,source=/var/lib/docker,target=/var/lib/docker"
+    "type=bind,source=/var/lib/docker,target=/var/lib/docker",
+    "type=bind,source=${localEnv:HOME}/.kube,target=/root/.kube,readonly"
   ],
+
+  "features": {
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
+      "version": "latest",
+      "helm": "latest",
+      "minikube": "none"
+    }
+  },
 
   "workspaceFolder": "${localWorkspaceFolder}",
   "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind",
